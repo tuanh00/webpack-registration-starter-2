@@ -1,17 +1,19 @@
 const express = require("express");
 const mysql = require("mysql2/promise");
 const cors = require("cors");
+const dotenv = require("dotenv");
+const path = require("path");
+
+dotenv.config({ path: path.join(__dirname, ".env") });
 
 const app = express(); // Create an Express app for routing
 app.use(cors()); // Enable CORS for all requests
-const port = 3000; // Port number for the server
 
 const dbConfig = {
-  host: "localhost",
-  user: "root",
-  password: "123456",
-  database: "webpack-registration-starter-db",
-  port: 3310,
+  host: "127.0.0.1",
+  user: process.env.MARIADB_USER,
+  password: process.env.MARIADB_PASSWORD,
+  database: process.env.MARIADB_DATABASE,
 };
 
 //JSON
@@ -50,31 +52,6 @@ app.get("/api/register", async (req, res) => {
   }
 });
 
-async function initDatabase() {
-  try {
-    const connection = await mysql.createConnection(dbConfig);
-    const [tables] = await connection.execute("SHOW TABLES LIKE 'users'");
-
-    if (tables.length === 0) {
-      const query = `CREATE TABLE users (
-    id INT AUTO_INCREMENT PRIMARY KEY,
-    username VARCHAR(255) NOT NULL,
-    password VARCHAR(255) NOT NULL,
-    email VARCHAR(255) NOT NULL,
-    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-    );`;
-
-      await connection.execute(query);
-      console.log("Table created successfully");
-    }
-    await connection.end();
-  } catch (error) {
-    console.error(error);
-    process.exit(1);
-  }
-}
-initDatabase().then(() => {
-  app.listen(port, () => {
-    console.log(`Server running on port ${port}`);
-  });
+app.listen(process.env.API_PORT, () => {
+  console.log(`Server running on port ${process.env.API_PORT}`);
 });

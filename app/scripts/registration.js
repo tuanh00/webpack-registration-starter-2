@@ -23,7 +23,7 @@ async function handleSubmit(e) {
   console.log("Sending data:", userData); // Debugging log
 
   try {
-    const response = await fetch("http://localhost:3000/api/register", {
+    const response = await fetch("/api/register", {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
