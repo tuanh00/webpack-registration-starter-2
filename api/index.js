@@ -1,7 +1,9 @@
 const express = require("express");
 const mysql = require("mysql2/promise");
+const cors = require("cors");
 
 const app = express(); // Create an Express app for routing
+app.use(cors()); // Enable CORS for all requests
 const port = 3000; // Port number for the server
 
 const dbConfig = {
