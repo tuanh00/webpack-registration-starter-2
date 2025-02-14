@@ -1,4 +1,4 @@
-import '../scss/main.scss';
+import './../scss/main.scss';
 
 document.addEventListener('DOMContentLoaded', ()=> {
     const app = document.getElementById('app');

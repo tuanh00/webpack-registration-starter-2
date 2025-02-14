@@ -1,44 +1,44 @@
-import "../scss/registration.scss";
+import "./../scss/registration.scss";
 
 document.addEventListener("DOMContentLoaded", () => {
   const form = document.getElementById("registrationForm");
   if (form) {
-    form.removeEventListener("submit", handleSubmit);
-    form.addEventListener("submit", handleSubmit);
+    form.addEventListener("submit", handleSubmit, { once: true }); // Ensures it runs only once
   }
 });
 
-
 async function handleSubmit(e) {
-    e.preventDefault();
+  e.preventDefault();
 
-    const name = document.getElementById("name").value;
-    const email = document.getElementById("email").value;
-    const password = document.getElementById("password").value;
+  const username = document.getElementById("username").value;
+  const email = document.getElementById("email").value;
+  const password = document.getElementById("password").value;
 
-    const userData = {
-      name,
-      email,
-      password,
-    };
+  const userData = {
+    username,
+    email,
+    password,
+  };
 
-    try {
-      const response = await fetch("http://localhost:3000/register", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify(userData),
-      });
+  console.log("Sending data:", userData); // Debugging log
 
-      if (response.ok) {
-        alert("User registered successfully!");
-        form.reset();
-      } else {
-        const error = await response.json();
-        alert(error.message);
-      }
-    } catch (error) {
-      console.error(error);
+  try {
+    const response = await fetch("http://localhost:3000/api/register", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify(userData),
+    });
+
+    if (response.ok) {
+      alert("User registered successfully!");
+      document.getElementById("registrationForm").reset(); // ✅ Fix
+    } else {
+      const error = await response.json();
+      alert(error.message);
     }
-};
+  } catch (error) {
+    console.error(error);
+  }
+}

@@ -11,23 +11,25 @@ const dbConfig = {
   user: "root",
   password: "123456",
   database: "webpack-registration-starter-db",
-  port: 3310
+  port: 3310,
 };
 
 //JSON
 app.use(express.json());
 
 app.post("/api/register", async (req, res) => {
-  const { name, email, password } = req.body;
+  const { username, email, password } = req.body;
 
-  if (!name || !email || !password) {
+  if (!username || !email || !password) {
+    console.log("Missing fields:", { username, email, password }); // Debugging log
     return res.status(400).json({ message: "Please enter all fields" });
   }
 
   try {
     const connection = await mysql.createConnection(dbConfig);
-    const query = "INSERT INTO users (name, email, password) VALUES (?, ?, ?)";
-    await connection.execute(query, [name, email, password]);
+    const query =
+      "INSERT INTO users (username, email, password) VALUES (?, ?, ?)";
+    await connection.execute(query, [username, email, password]);
     await connection.end();
     res.status(201).json({ message: "User registered successfully" });
   } catch (error) {
